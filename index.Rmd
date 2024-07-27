@@ -1,12 +1,11 @@
 ---
-title: "Kat's Blog"
+title: "Welcome"
 ---
 
 Hi! This blog is a work in progress.
 
-## Articles
 
-### [Britain's Prisons. Just How Much Trouble Are We In?](prisons.html)
+## [Britain's Prisons. Just How Much Trouble Are We In?](prisons.html)
 
 ![Derek Harper / *Wandsworth Prison* / [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)](prison.jpg)
 

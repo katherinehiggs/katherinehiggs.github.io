@@ -10,13 +10,16 @@ navbar:
     - text: "About"
       icon: fa-user 
       href: about.html
-    - text: "Blog"
-      icon: fa-rss
-      href: https://katherinehiggs.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
+    - text: "Articles"
+      icon: fa-newspaper
+      href: articles.html  # CHANGE HERE OR DELETE ALL 3 LINES 
+      menu:
+        - text: Britain's Prisons. Just How Much Trouble Are We In?
+          href: prisons.html
   right:
     - text: "Twitter"
       icon: fa-twitter
-      href: https://x.com                    # CHANGE HERE 
+      href: https://x.com/KatHiggs_                    # CHANGE HERE 
     - text: "GitHub"
       icon: fa-github
       href: https://github.com/katherinehiggs       # CHANGE HERE 
