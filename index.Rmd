@@ -4,7 +4,7 @@ title: "Kat's Blog"
 
 Hi! This blog is a work in progress.
 
-## [Britain's Prisons. Just How Much Trouble Are We In?](prisons.Rmd)
+## [Britain's Prisons. Just How Much Trouble Are We In?](prisons)
 
 ![
 Derek Harper / *Wandsworth Prison* / [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)
