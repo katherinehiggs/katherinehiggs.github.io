@@ -59,9 +59,7 @@ theme_set(theme_lab())
 
 ```
 
-![
-Derek Harper / *Wandsworth Prison* / [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)
-](prison.jpg)
+![Derek Harper / *Wandsworth Prison* / [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)](prison.jpg)
 
 ```{r Prison Population}
 
