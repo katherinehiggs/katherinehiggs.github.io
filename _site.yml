@@ -1,7 +1,7 @@
-name: "YOURNAME"                                # CHANGE HERE 
+name: "Kat's Blog"                                # CHANGE HERE 
 output_dir: "."
 navbar:
-  title: "YOURNAME"                             # CHANGE HERE 
+  title: "Katherine Higgs"                             # CHANGE HERE 
   type: inverse
   left:
     - text: "Home"
@@ -10,20 +10,17 @@ navbar:
     - text: "About"
       icon: fa-user 
       href: about.html
-    - text: "CV"
-      icon: fa-file-pdf-o
-      href: cv.html
     - text: "Blog"
       icon: fa-rss
-      href: https://YOURGITHUB.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
+      href: https://katherinehiggs.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
   right:
-    - text: "Contact me"
-      icon: fa-envelope-o
-      href: mailto:YOUREMAIL                    # CHANGE HERE 
+    - text: "Twitter"
+      icon: fa-twitter
+      href: https://x.com                    # CHANGE HERE 
     - text: "GitHub"
       icon: fa-github
-      href: https://github.com/YOURGITHUB       # CHANGE HERE 
+      href: https://github.com/katherinehiggs       # CHANGE HERE 
 output:
   html_document:
-    theme: cosmo
-    highlight: textmate
+    theme: lumen
+    highlight: kate

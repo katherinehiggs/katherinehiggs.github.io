@@ -1,0 +1,118 @@
+---
+title: Britain's Prisons. Just How Much Trouble Are We In?
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+library(readr)
+library(ggplot2)
+library(data.table)
+library(tidyverse)
+
+library(ggthemes) # Load
+library(tidyquant)
+
+
+theme_lab <- function () { 
+  theme_grey(base_size = 14, base_family = "sans") %+replace% 
+    theme(
+      # plot margin
+      plot.margin = unit(rep(0.5, 4), "cm"),
+      # plot background and border
+      plot.background = element_blank(),
+      panel.background = element_blank(),
+      panel.border = element_blank(),
+      # grid lines
+      panel.grid.major.x = element_blank(),
+      panel.grid.major.y = element_line(size = 0.5, color = "#cbcbcb"), 
+      panel.grid.minor = element_blank(),
+      # axis ticks and lines
+      axis.ticks = element_blank(),
+      axis.line = element_blank(),
+      # title, subtitle and caption
+      plot.title = element_text(size = 20, face = "bold", colour = "#757575", hjust = 0),
+      plot.subtitle = element_text(size = 16, colour = "#757575", hjust = 0, margin = margin(9, 0, 9, 0)),
+      plot.caption = element_text(size = 10, color = "grey50", hjust = 1, margin = margin(t = 15)),
+      # axes titles
+      axis.title = element_text(colour = "#757575", hjust = 1),
+      axis.text.x = element_text(margin = margin(b = 7)),
+      axis.text.y = element_text( margin = margin(l = 7)),
+      # legend
+      legend.position = "top",
+      legend.background = element_blank(),
+      legend.key = element_blank(),
+      legend.title = element_text(size = 12, colour = "#757575"),
+      legend.text.align = 0,
+      legend.text = element_text(size = 14, colour = "#757575"),
+      # facetting
+      strip.background = element_rect(fill = "transparent", colour = NA),
+      strip.text = element_text(size = 12, face = "bold", colour = "#757575", hjust = 0)
+    )
+}
+
+library(ggplot2) ; library(tidyverse) ; library(scales) ; library(svglite)
+
+source("https://trafforddatalab.github.io/assets/theme/ggplot2/theme_lab.R")
+
+theme_set(theme_lab())
+
+```
+
+![
+Derek Harper / *Wandsworth Prison* / [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)
+](prison.jpg)
+
+```{r Prison Population}
+
+data <- read_csv("prison_population.csv")
+data$Month <- as.Date(data$Month, origin = "1899-12-30")
+prison_population <- data[data$Sex == 'Both',] %>%
+  ggplot(aes(x = Month, y = Population)) +
+  geom_line(size = 0.75, color = '#c8a2c8') + 
+  labs(x = "Month", y = "Total Prisoners", title = "Prison Population at Month End \n (January 2009 to January 2024)")
+prison_population
+```
+
+```{r Capacity Scatter}
+data <- read_csv("capacity.csv")
+
+data$num_above_max <- data$`Population *` - data$`In Use CNA`
+
+data %>%
+  ggplot(aes(x = `In Use CNA`, y = `Population *`)) +
+  geom_point(aes(colour = cut(num_above_max, c(-Inf, 0, Inf)))) +
+  geom_abline(intercept = 0, slope = 1, linetype="dashed", color = 'darkblue') +
+  labs(x = "Prison Capacity", y = "Number of Prisoners", title = "Number of Prisoners Against Capacity \n in England & Wales (May 2024)", col = "Above or Below Capacity")
+
+```
+
+```{r Capacity Histogram}
+plot <- data %>%
+  ggplot(aes(x=num_above_max)) + 
+  geom_histogram(color="darkgrey", fill="coral", binwidth = 50 ) +
+  labs(x = "Number of Prisoners Above Capacity", y = "Count", title = "Prison Overcapacity Distribution \n in England & Wales (May 2024)")
+
+plot <- plot + geom_vline(aes(xintercept=mean(num_above_max)),
+             color="blue", linetype="dashed", size=1)
+
+plot
+```
+
+```{r Capacity Density}
+ggplot(data, aes(x=num_above_max)) + 
+  geom_histogram(aes(y=after_stat(density)), colour="darkgrey", fill="coral", binwidth = 50)+
+  geom_density(alpha=.2, fill="#FF6666") +
+  labs(x = "Number of Prisoners Above Capacity", y = "Density", title = "Prison Overcapacity Distribution \n in England & Wales (May 2024)")
+
+```
+
+```{r Types of Offence}
+
+data <- read.csv("offence_types.csv")
+data <- data[order(data$Number, decreasing = FALSE),]
+data %>%
+  ggplot(aes(x = reorder(`Offence.category`, -Number), y = Number, fill = `Offence.category`)) +
+  geom_bar(stat = 'identity') + theme(legend.position="none") + coord_flip()
+
+```
