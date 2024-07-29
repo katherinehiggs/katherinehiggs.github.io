@@ -1,5 +1,5 @@
 ---
-title: Britain's Prisons. Just How Much Trouble Are We In?
+title: Prisons in Figures. Just How Much Trouble Are We In?
 ---
 
 ```{r setup, include=FALSE}
@@ -73,35 +73,114 @@ prison_population
 ```
 
 ```{r Capacity Scatter}
-data <- read_csv("capacity.csv")
+data_2024 <- read_csv("capacity.csv")
 
-data$num_above_max <- data$`Population *` - data$`In Use CNA`
+data_2024$num_above_max <- data_2024$`Population *` - data_2024$`In Use CNA`
 
-data %>%
+data_2024 %>%
   ggplot(aes(x = `In Use CNA`, y = `Population *`)) +
   geom_point(aes(colour = cut(num_above_max, c(-Inf, 0, Inf)))) +
   geom_abline(intercept = 0, slope = 1, linetype="dashed", color = 'darkblue') +
-  labs(x = "Prison Capacity", y = "Number of Prisoners", title = "Number of Prisoners Against Capacity \n in England & Wales (May 2024)", col = "Above or Below Capacity")
+  labs(x = "Prison Capacity (In-Use CNA)", y = "Number of Prisoners", title = "Number of Prisoners Against Capacity \n in England & Wales (May 2024)", col = "Above or Below Capacity") +
+theme(legend.position="none") +
+scale_color_manual(values = c("#50C878", "#FF5733"))
 
 ```
 
-```{r Capacity Histogram}
-plot <- data %>%
+```{r Capacity Histogram, fig.show="hold", out.width="50%"}
+
+data <- read.csv("capacity_over_time.csv")
+data$num_above_max <- data$Population.. - data$`In.Use.CNA`
+
+data_2019 <- filter(data, Year == "2019")
+
+plot <- data_2019 %>%
+  ggplot(aes(x=num_above_max)) + 
+  geom_histogram(color="darkgrey", fill="#A7C7E7", binwidth = 50 ) +
+  labs(x = "Number of Prisoners Above Capacity (Above In-Use CNA)", y = "Count", title = "Prison Overcapacity Distribution \n in England & Wales (December 2019)")
+
+plot + geom_vline(aes(xintercept=mean(data_2019$num_above_max)),
+             color="blue", linetype="dashed", size=1)
+
+plot <- data_2024 %>%
   ggplot(aes(x=num_above_max)) + 
   geom_histogram(color="darkgrey", fill="coral", binwidth = 50 ) +
-  labs(x = "Number of Prisoners Above Capacity", y = "Count", title = "Prison Overcapacity Distribution \n in England & Wales (May 2024)")
+  labs(x = "Number of Prisoners Above Capacity (Above In-Use CNA)", y = "Count", title = "Prison Overcapacity Distribution \n in England & Wales (May 2024)")
+
+plot + geom_vline(aes(xintercept=mean(data_2024$num_above_max)),
+             color="blue", linetype="dashed", size=1)
+
+
+
+
+
+```
+
+```{r Capacity Density, fig.show="hold", out.width="50%"}
+
+ggplot(data_2019, aes(x=num_above_max)) + 
+  geom_histogram(aes(y=after_stat(density)), colour="darkgrey", fill="#A7C7E7", binwidth = 50)+
+  geom_density(alpha=.2, fill="#FF6666") +
+  labs(x = "Number of Prisoners Above Capacity (Above In-Use CNA)", y = "Density", title = "Prison Overcapacity Distribution \n in England & Wales (December 2019)")
+
+ggplot(data_2024, aes(x=num_above_max)) + 
+  geom_histogram(aes(y=after_stat(density)), colour="darkgrey", fill="coral", binwidth = 50)+
+  geom_density(alpha=.2, fill="#FF6666") +
+  labs(x = "Number of Prisoners Above Capacity (Above In-Use CNA)", y = "Density", title = "Prison Overcapacity Distribution \n in England & Wales (May 2024)")
+
+
+
+
+```
+
+```{r capacity over time}
+data <- read.csv("capacity_over_time.csv")
+data$num_above_max <- data$Population.. - data$`In.Use.CNA`
+
+data$Year <- as.factor(data$Year)
+data |>
+  ggplot(aes(x = Year, y = num_above_max, color = Year)) +
+  geom_boxplot() +
+  labs(x = "Year", y = "Number of Prisoners Above Capacity \n (Above In-Use CNA)", title = "Prison Overcapacity \n in England & Wales (2019 - 2024)") + theme(legend.position="none")
+```
+
+
+```{r 2019 dists}
+
+
+data_2019 <- filter(data, Year == "2019")
+
+plot <- data_2019 %>%
+  ggplot(aes(x=num_above_max)) + 
+  geom_histogram(color="darkgrey", fill="#A7C7E7", binwidth = 50 ) +
+  labs(x = "Number of Prisoners Above Capacity (Above In-Use CNA)", y = "Count", title = "Prison Overcapacity Distribution \n in England & Wales (December 2019)")
 
 plot <- plot + geom_vline(aes(xintercept=mean(num_above_max)),
              color="blue", linetype="dashed", size=1)
 
 plot
+
+
+
+
 ```
 
-```{r Capacity Density}
-ggplot(data, aes(x=num_above_max)) + 
-  geom_histogram(aes(y=after_stat(density)), colour="darkgrey", fill="coral", binwidth = 50)+
-  geom_density(alpha=.2, fill="#FF6666") +
-  labs(x = "Number of Prisoners Above Capacity", y = "Density", title = "Prison Overcapacity Distribution \n in England & Wales (May 2024)")
+
+```{r capacity for most overpopulated prisons over time}
+prison_list <- c("Wandsworth", "Oakwood", "Pentonville", "Leeds", "Forest Bank", "Doncaster", "Durham", "Altcourse", "Hull", "Brixton")
+short_prison_list <- c("Wandsworth", "Oakwood", "Pentonville", "Leeds", "Forest Bank")
+
+data_sub <- subset(data, Prison.Name %in% short_prison_list)
+
+data_sub |>
+  ggplot(aes(x = Year, y = num_above_max, fill = Prison.Name)) +
+  geom_bar(stat="identity", position=position_dodge()) + labs(x = "Year", y = "Number of Prisoners Above Capacity \n (Above In-Use CNA)", title = "Prison Overcapacity for Five Prisons \n in England & Wales (2019 - 2024)", color = "Prison") +
+  scale_fill_discrete(name = "Prison") + theme(legend.key.size = unit(0.2, 'cm'))
+
+
+
+
+
 
 ```
 
@@ -111,6 +190,9 @@ data <- read.csv("offence_types.csv")
 data <- data[order(data$Number, decreasing = FALSE),]
 data %>%
   ggplot(aes(x = reorder(`Offence.category`, -Number), y = Number, fill = `Offence.category`)) +
-  geom_bar(stat = 'identity') + theme(legend.position="none") + coord_flip()
+  geom_bar(stat = 'identity') + theme(legend.position="none") + coord_flip() +
+  labs(y = "Prisoners Convicted of Offence", title = "Number of Prisoners by Type of Offence (March 2024)", color = "Prison")
 
 ```
+
+

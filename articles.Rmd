@@ -2,4 +2,4 @@
 title: "Articles"
 ---
 
-- [Britain's Prisons. Just How Much Trouble Are We In? (July 2024)](prisons.html) 
+- [Prisons in Figures. Just How Much Trouble Are We In? (July 2024)](prisons.html) 
