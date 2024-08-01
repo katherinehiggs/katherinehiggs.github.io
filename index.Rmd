@@ -1,12 +1,12 @@
 ---
-title: "Welcome"
+title: "Seeing Politics"
+subtitle: "Exploring poltics through data visualisation. A blog by Katherine Higgs."
 ---
+
 
 Hi! This blog is a work in progress.
 
+In the future articles will appear below.
 
-## [Prisons in Figures. Just How Much Trouble Are We In?](prisons.html)
+Kat
 
-![Derek Harper / *Wandsworth Prison* / [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)](prison.jpg)
-
-A visual look at the capacity of prisons in England and Wales. [found here](%22prisons.Rmd%22)

@@ -1,0 +1,171 @@
+---
+title: "Running Out of Time: The State of NHS Waiting Lists"
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+library(readr)
+library(ggplot2)
+library(data.table)
+library(tidyverse)
+
+library(ggthemes) # Load
+library(tidyquant)
+
+
+theme_lab <- function () { 
+  theme_grey(base_size = 14, base_family = "sans") %+replace% 
+    theme(
+      # plot margin
+      plot.margin = unit(rep(0.5, 4), "cm"),
+      # plot background and border
+      plot.background = element_blank(),
+      panel.background = element_blank(),
+      panel.border = element_blank(),
+      # grid lines
+      panel.grid.major.x = element_blank(),
+      panel.grid.major.y = element_line(size = 0.5, color = "#cbcbcb"), 
+      panel.grid.minor = element_blank(),
+      # axis ticks and lines
+      axis.ticks = element_blank(),
+      axis.line = element_blank(),
+      # title, subtitle and caption
+      plot.title = element_text(size = 20, face = "bold", colour = "#757575", hjust = 0),
+      plot.subtitle = element_text(size = 16, colour = "#757575", hjust = 0, margin = margin(9, 0, 9, 0)),
+      plot.caption = element_text(size = 10, color = "grey50", hjust = 1, margin = margin(t = 15)),
+      # axes titles
+      axis.title = element_text(colour = "#757575", hjust = 1),
+      axis.text.x = element_text(margin = margin(b = 7)),
+      axis.text.y = element_text( margin = margin(l = 7)),
+      # legend
+      legend.position = "top",
+      legend.background = element_blank(),
+      legend.key = element_blank(),
+      legend.title = element_text(size = 12, colour = "#757575"),
+      legend.text.align = 0,
+      legend.text = element_text(size = 14, colour = "#757575"),
+      # facetting
+      strip.background = element_rect(fill = "transparent", colour = NA),
+      strip.text = element_text(size = 12, face = "bold", colour = "#757575", hjust = 0)
+    )
+}
+
+theme_set(theme_lab())
+
+```
+
+```{r setup datasets}
+
+RTT_data <- read.csv("RTT_Data.csv")
+Month <- RTT_data$Month
+RTT_data <- subset(RTT_data, select = -c(1))
+RTT_data <- mutate_all(RTT_data, function(x) as.numeric(as.character(x)))
+
+RTT_data$Month <- as.Date(Month, format = "%d/%m/%Y")
+
+num_above_target = RTT_data$total_waiting - RTT_data$within_18
+RTT_data$num_above_target = num_above_target
+
+pre_covid <- filter(RTT_data, post_covid == 0)
+  
+post_covid <- filter(RTT_data, post_covid == 1)
+
+```
+
+It is no secret that since the COVID-19 pandemic the NHS has faced unprecedented demand. A backlog of appointments, strikes and the worsening health of the general population have all factored into this. 
+
+
+In the 2024 election NHS waiting lists were a key campaign point for (insert here some examples). But how dire is the situation with NHS waiting lists?
+
+
+## Referral to Treatment (RTT)
+
+Referral to Treatment (RTT) refers to the amount of time a patient waits before receiving elective treatment after being referred to a consultant led service. This could be for anything from a patient being referred for a hip replacement, due to a positive FIT test or to be treated for rheumatoid arthritis. 
+
+In England the NHS constitution set out that patients should have to wait a maximum of 18 weeks from the point of referral to receiving first definitive treatment (FDT) for their condition. The aim was for 92% of patients to meet this target.
+
+Lets take us a look at the median RTT performance for each month, from 2007 to May of this year.
+
+### On Average Patients Are Waiting Longer for Treatment Than Pre-Pandemic
+```{r median RTT overall}
+median_waiting_to_start <-
+  RTT_data |>
+  ggplot(aes(x = Month, y= median_wait)) +
+  geom_line(size = 0.75, color = '#c8a2c8') +
+  labs(x="Month", y = "Median RTT Weeks Waited", title = "Median Weeks Waited for Treatment")
+median_waiting_to_start
+
+```
+
+It is clear that the median weeks waited for treatment has increased since COVID, and only seems to be growing, however the median is still far below 18 weeks. So are we reaching that 92% target?
+
+```{r target}
+
+  RTT_data |>
+  ggplot(aes(x = Month)) +
+  geom_line(aes(y = within_18), size = 0.75, color = '#c8a2c8') +
+  geom_line(aes(y = total_waiting), size = 0.75, color = 'green') +
+  geom_line(aes(y = 0.92 * total_waiting), linetype = "dashed", size = 0.75, color = 'blue') +
+  labs(x="Month", y = "Number of Patients", title = "Are We Achieving the 92% Target?")
+
+```
+
+```{r over 18 and 52}
+
+  RTT_data |>
+  ggplot(aes(x = Month)) +
+  geom_line(aes(y = greater_52), size = 1, color = 'green') +
+  geom_line(aes(y = greater_65), size = 1, color = 'blue') +
+  geom_line(aes(y = greater_78), size = 1, color = 'orange') +
+  geom_line(aes(y = greater_104), size = 1, color = 'pink') +
+  labs(x="Month", y = "Number of Patients", title = "Are We Achieving the 92% Target?")
+
+```
+
+## How Many Patients Above Target Are We?
+```{r above target nums}
+
+RTT_data |>
+  ggplot(aes(x = Month, y = num_above_target)) +
+  geom_line(size = 0.75, color = '#c8a2c8') +
+  labs(x="Month", y = "Number of Patients", title = "Are We Achieving the 92% Target?")
+
+
+pre_covid %>%
+  ggplot(aes(x=num_above_target, fill = as.factor(year))) + 
+  geom_histogram(color="darkgrey", binwidth = (10**6)/4 ) +
+  labs(x = "", y = "Count", title = "")
+
+
+post_covid %>%
+  ggplot(aes(x=num_above_target, fill = as.factor(year))) + 
+  geom_histogram(color="darkgrey", binwidth = (10**6)/4 ) +
+  labs(x = "", y = "Count", title = "")
+
+RTT_data %>%
+  ggplot(aes(x = as.factor(post_covid), y=num_above_target, color = as.factor(post_covid))) +
+  geom_boxplot() + 
+  labs(x = "", y = "Count", title = "")
+
+
+```
+
+## When it Rains it Pours
+
+Not all services are as in demand. Some services have far larger pressures and so far larger RTT waits for patients. 
+
+## Are They *New* Patients?
+
+```{r}
+
+RTT_data |>
+  ggplot(aes(x = unique_patients, y=total_waiting)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+lm = lm(unique_patients ~ total_waiting, data=RTT_data) 
+plot(resid(lm))
+hist(resid(lm), breaks = 20)
+summary(lm)
+```
+## How did We Solve it before?

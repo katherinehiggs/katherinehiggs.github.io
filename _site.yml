@@ -1,7 +1,7 @@
-name: "Kat's Blog"                                # CHANGE HERE 
+name: "Seeing Politics"                                # CHANGE HERE 
 output_dir: "."
 navbar:
-  title: "Katherine Higgs"                             # CHANGE HERE 
+  title: "Seeing Politics"                             # CHANGE HERE 
   type: inverse
   left:
     - text: "Home"
@@ -14,8 +14,8 @@ navbar:
       icon: fa-newspaper
       href: articles.html  # CHANGE HERE OR DELETE ALL 3 LINES 
       menu:
-        - text: Britain's Prisons. Just How Much Trouble Are We In?
-          href: prisons.html
+        - text: Articles will appear in this section.
+          href:
   right:
     - text: "Twitter"
       icon: fa-twitter
