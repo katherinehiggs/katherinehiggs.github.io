@@ -144,7 +144,6 @@ data |>
   labs(x = "Year", y = "Number of Prisoners Above Capacity \n (Above In-Use CNA)", title = "Prison Overcapacity \n in England & Wales (2019 - 2024)") + theme(legend.position="none")
 ```
 
-
 ```{r 2019 dists}
 
 
@@ -164,7 +163,6 @@ plot
 
 
 ```
-
 
 ```{r capacity for most overpopulated prisons over time}
 prison_list <- c("Wandsworth", "Oakwood", "Pentonville", "Leeds", "Forest Bank", "Doncaster", "Durham", "Altcourse", "Hull", "Brixton")
@@ -194,5 +192,3 @@ data %>%
   labs(y = "Prisoners Convicted of Offence", title = "Number of Prisoners by Type of Offence (March 2024)", color = "Prison")
 
 ```
-
-

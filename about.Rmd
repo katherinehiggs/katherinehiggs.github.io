@@ -1,7 +1,3 @@
 ---
 title: "About me"
 ---
-
-I am a mathematics graduate, having studied at The University of Sheffield.
-
-I am interested in applying statistics and data visualisation to the messy world of politics.

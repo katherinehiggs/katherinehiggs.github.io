@@ -1,6 +1,7 @@
 ---
 title: "Running Out of Time: The State of NHS Waiting Lists"
 ---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
@@ -11,6 +12,8 @@ library(tidyverse)
 
 library(ggthemes) # Load
 library(tidyquant)
+
+colours <- c("#ea5545", "#f46a9b", "#ef9b20", "#edbf33", "#ede15b", "#bdcf32", "#87bc45", "#27aeef", "#b33dc6")
 
 
 theme_lab <- function () { 
@@ -52,6 +55,7 @@ theme_lab <- function () {
 
 theme_set(theme_lab())
 
+ggplot <- function(...) ggplot2::ggplot(...) + scale_color_brewer(palette="Spectral")
 ```
 
 ```{r setup datasets}
@@ -70,89 +74,168 @@ pre_covid <- filter(RTT_data, post_covid == 0)
   
 post_covid <- filter(RTT_data, post_covid == 1)
 
+RTT_2024 <- read.csv("RTT_2024_2.csv")
+region_code <- RTT_2024$Region.Code
+region_name <- RTT_2024$Region.Name
+specialty <- RTT_2024$Treatment.Function
+RTT_2024 <- subset(RTT_2024, select = -c(1, 2, 3))
+RTT_2024 <- mutate_all(RTT_2024, function(x) as.numeric(as.character(x)))
+RTT_2024$region_code <- region_code
+RTT_2024$region_name <- region_name
+RTT_2024$specialty <- specialty
+
+
 ```
 
-It is no secret that since the COVID-19 pandemic the NHS has faced unprecedented demand. A backlog of appointments, strikes and the worsening health of the general population have all factored into this. 
-
+It is no secret that since the COVID-19 pandemic the NHS has faced unprecedented demand. A backlog of appointments, strikes and the worsening health of the general population have all factored into this.
 
 In the 2024 election NHS waiting lists were a key campaign point for (insert here some examples). But how dire is the situation with NHS waiting lists?
 
-
 ## Referral to Treatment (RTT)
 
-Referral to Treatment (RTT) refers to the amount of time a patient waits before receiving elective treatment after being referred to a consultant led service. This could be for anything from a patient being referred for a hip replacement, due to a positive FIT test or to be treated for rheumatoid arthritis. 
+Referral to Treatment (RTT) refers to the amount of time a patient waits before receiving elective treatment after being referred to a consultant led service. This could be for anything from a patient being referred for a hip replacement, due to a positive FIT test or to be treated for rheumatoid arthritis.
 
 In England the NHS constitution set out that patients should have to wait a maximum of 18 weeks from the point of referral to receiving first definitive treatment (FDT) for their condition. The aim was for 92% of patients to meet this target.
 
 Lets take us a look at the median RTT performance for each month, from 2007 to May of this year.
 
 ### On Average Patients Are Waiting Longer for Treatment Than Pre-Pandemic
+
 ```{r median RTT overall}
 median_waiting_to_start <-
   RTT_data |>
-  ggplot(aes(x = Month, y= median_wait)) +
-  geom_line(size = 0.75, color = '#c8a2c8') +
-  labs(x="Month", y = "Median RTT Weeks Waited", title = "Median Weeks Waited for Treatment")
+  ggplot(aes(x = Month, y= median_wait, color = colours[1])) +
+  geom_line() +
+  labs(x="Month", y = "Median RTT Weeks Waited", title = "Median Weeks Waited for Treatment") + theme(legend.position="none")
 median_waiting_to_start
 
 ```
 
 It is clear that the median weeks waited for treatment has increased since COVID, and only seems to be growing, however the median is still far below 18 weeks. So are we reaching that 92% target?
 
-```{r target}
+```{r target, fig.width=10, fig.height=6}
 
-  RTT_data |>
-  ggplot(aes(x = Month)) +
-  geom_line(aes(y = within_18), size = 0.75, color = '#c8a2c8') +
-  geom_line(aes(y = total_waiting), size = 0.75, color = 'green') +
-  geom_line(aes(y = 0.92 * total_waiting), linetype = "dashed", size = 0.75, color = 'blue') +
-  labs(x="Month", y = "Number of Patients", title = "Are We Achieving the 92% Target?")
+RTT_data$`92% Target` = 0.92*RTT_data$total_waiting
+RTT_data$`Patients Waiting Within 18 Weeks` <- RTT_data$within_18
+RTT_data$`Total Patients Waiting` <- RTT_data$total_waiting
 
+RTT_data[,c("Month", "Patients Waiting Within 18 Weeks", "Total Patients Waiting", "92% Target")] |>
+  pivot_longer(cols = c(`Patients Waiting Within 18 Weeks`, `Total Patients Waiting`, `92% Target`), names_to = "Stat", values_to = "Value") |> 
+  mutate(linetype= if_else(Stat == "92% Target", '1', '0')) |>
+  ggplot(aes(x = Month, y = Value, color = Stat, linetype = linetype)) +
+  geom_line(size = 1.5) +
+  labs(x="Month", y = "Patients Awaiting Treatment", title = "Are We Achieving the 92% Target?", color = '') + scale_y_continuous(labels = scales::comma) + scale_color_manual(values=c(`Patients Waiting Within 18 Weeks`=colours[1],`Total Patients Waiting`=colours[2], `92% Target` = "darkblue")) +  guides(linetype=FALSE) + scale_x_date(date_breaks = "2 year", date_labels = "%Y")
+
+ggsave("achieving.jpg")
 ```
 
 ```{r over 18 and 52}
 
   RTT_data |>
   ggplot(aes(x = Month)) +
-  geom_line(aes(y = greater_52), size = 1, color = 'green') +
-  geom_line(aes(y = greater_65), size = 1, color = 'blue') +
-  geom_line(aes(y = greater_78), size = 1, color = 'orange') +
-  geom_line(aes(y = greater_104), size = 1, color = 'pink') +
+  geom_line(aes(y = greater_52), size = 1, color = colours[1]) +
+  geom_line(aes(y = greater_65), size = 1, color = colours[2]) +
+  geom_line(aes(y = greater_78), size = 1, color = colours[3]) +
+  geom_line(aes(y = greater_104), size = 1, color = colours[4]) +
   labs(x="Month", y = "Number of Patients", title = "Are We Achieving the 92% Target?")
 
 ```
 
 ## How Many Patients Above Target Are We?
+
 ```{r above target nums}
 
 RTT_data |>
   ggplot(aes(x = Month, y = num_above_target)) +
-  geom_line(size = 0.75, color = '#c8a2c8') +
+  geom_line(size = 0.75, color = colours[1]) +
   labs(x="Month", y = "Number of Patients", title = "Are We Achieving the 92% Target?")
 
 
 pre_covid %>%
+  ggplot(aes(x=num_above_target)) + 
+  geom_histogram(binwidth = (10**6)/4, fill = colours[1] ) +
+  labs(x = "", y = "Count", title = "")
+
+
+post_covid %>%
+  ggplot(aes(x=num_above_target)) + 
+  geom_histogram(binwidth = (10**6)/4, fill = colours[2]) +
+  labs(x = "", y = "Count", title = "")
+
+pre_covid %>%
   ggplot(aes(x=num_above_target, fill = as.factor(year))) + 
-  geom_histogram(color="darkgrey", binwidth = (10**6)/4 ) +
+  geom_histogram(binwidth = (10**6)/4 ) +
   labs(x = "", y = "Count", title = "")
 
 
 post_covid %>%
   ggplot(aes(x=num_above_target, fill = as.factor(year))) + 
-  geom_histogram(color="darkgrey", binwidth = (10**6)/4 ) +
+  geom_histogram(binwidth = (10**6)/4 ) +
   labs(x = "", y = "Count", title = "")
 
 RTT_data %>%
-  ggplot(aes(x = as.factor(post_covid), y=num_above_target, color = as.factor(post_covid))) +
-  geom_boxplot() + 
+  filter(post_covid != "") %>%
+  ggplot(aes(x = as.factor(post_covid), y=num_above_target, fill = as.factor(post_covid))) +
+  geom_violin(width=1) +
+    geom_boxplot(width=0.1, color="black", alpha=0.2) +
   labs(x = "", y = "Count", title = "")
 
 
 ```
 
-## When it Rains it Pours
+## Which Services are Affected?
 
-Not all services are as in demand. Some services have far larger pressures and so far larger RTT waits for patients. 
+Not all services are as in demand. Some services have far larger pressures and so far larger RTT waits for patients.
+
+```{r}
+
+library("scales") 
+
+filtered <- filter(RTT_2024, (specialty != "Total"))
+filtered <- filter(filtered, region_name == "NHS ENGLAND")
+
+filtered|>
+  arrange(within.18.weeks) |>
+      mutate(specialty = factor(specialty, levels = specialty)) |>
+        ggplot(aes(x = specialty, y = within.18.weeks)) +
+        geom_bar(stat = "identity", dodge = TRUE, fill = "#ef5675" ) + geom_abline(intercept = 0.92, slope = 0, linetype="dashed", color = 'darkblue') + labs(x = "Treatment Function", y = "Percentage Within 18 Weeks", title = "Title") + scale_y_continuous(labels = scales::percent, breaks = c(0, 0.25, 0.5, 0.75, 0.92)) + coord_flip() + theme(legend.position="none") 
+
+
+filtered|>
+  filter(Average..median..waiting.time..in.weeks.!= "") |>
+  arrange(Average..median..waiting.time..in.weeks.) |>
+      mutate(specialty = factor(specialty, levels = specialty)) |>
+        ggplot(aes(x = specialty, y = Average..median..waiting.time..in.weeks.)) +
+        geom_bar(stat = "identity", dodge = TRUE, fill = "#ffa600") + geom_abline(intercept = 18, slope = 0, linetype="dashed", color = 'darkblue') + labs(x = "Treatment Function", y = "Average Median Wait Weeks", title = "Title") + scale_y_continuous(breaks = c(0, 5, 10, 15, 18, 20)) + coord_flip() + theme(legend.position="none") 
+
+
+
+```
+
+```{r}
+
+library("scales") 
+
+filtered <- filter(RTT_2024, (specialty == "Total"))
+filtered <- filter(filtered, (region_name != "NHS ENGLAND"))
+filtered$region_name <- str_wrap(filtered$region_name, width = 15)
+filtered|>
+  arrange(within.18.weeks) |>
+      mutate(region_name = factor(region_name, levels = region_name)) |>
+        ggplot(aes(x = region_name, y = within.18.weeks, fill = "white")) +
+        geom_bar(stat = "identity") + geom_abline(intercept = 0.92, slope = 0, linetype="dashed", color = 'darkblue') + labs(x = "Treatment Function", y = "Percentage Within 18 Weeks", title = "Title") + scale_y_continuous(labels = scales::percent, breaks = c(0, 0.25, 0.5, 0.75, 0.92), limits = c(0, 1)) + theme( legend.position="none") + coord_flip()
+
+
+filtered|>
+  filter(Average..median..waiting.time..in.weeks.!= "") |>
+  arrange(Average..median..waiting.time..in.weeks.) |>
+      mutate(region_name = factor(region_name, levels = region_name)) |>
+        ggplot(aes(x = region_name, y = Average..median..waiting.time..in.weeks., fill = "white")) +
+        geom_bar(stat = "identity", dodge = TRUE) + geom_abline(intercept = 18, slope = 0, linetype="dashed", color = 'darkblue') + labs(x = "Treatment Function", y = "Average Median Wait Weeks", title = "Title") + scale_y_continuous(breaks = c(0, 5, 10, 15, 18, 20), limits = c(0,20)) + coord_flip() + theme(legend.position="none") 
+
+
+
+```
 
 ## Are They *New* Patients?
 
@@ -168,4 +251,56 @@ plot(resid(lm))
 hist(resid(lm), breaks = 20)
 summary(lm)
 ```
+
 ## How did We Solve it before?
+
+```{r map, fig.width=14, fig.height=7}
+library(sf)
+library(patchwork)
+library(ggrepel)
+library(scales)
+
+median_sf <- read_sf("NHS_England_Regions.geojson")
+totals <- filter(RTT_2024, specialty == "Total")
+totals <- filter(totals, region_name != "NHS ENGLAND")
+
+names(median_sf)[names(median_sf) == "NHSER22NM"] <- "region_name"
+  
+totals$region_name <- str_to_title(totals$region_name)
+median_sf$region_name <- str_to_title(median_sf$region_name
+                                 )
+
+map_plot <- function(stat, legend_title){
+ ggplot(df, aes(fill = stat)) +
+  geom_sf(color = "white") + ggrepel::geom_label_repel(
+    data = df,
+    aes(label = region_name, geometry = geometry),
+    stat = "sf_coordinates",
+    min.segment.length = 0,
+    size = 5,
+    colour = "white",
+    segment.colour = "white"
+  ) +
+  theme_void() + scale_fill_gradientn(colours = wesanderson::wes_palette("Zissou1", 100, type = "continuous"), labels = scales::percent)  + guides(override.aes = aes(label = ""), fill=guide_legend(title= legend_title)) + labs(fill=legend_title)
+  
+} 
+
+
+df <- merge(median_sf, totals, by = "region_name", all = TRUE)
+
+map_plot(df$within.18.weeks, "Pathways Within 18 Weeks")
+
+df$over_18 <- (df$Total.number.of.incomplete.pathways - df$Total.within.18.weeks)/df$Total.number.of.incomplete.pathways
+df$over_52 <- (df$Total.52.plus.weeks)/df$Total.number.of.incomplete.pathways
+df$over_78 <- (df$Total.78.plus.weeks)/df$Total.number.of.incomplete.pathways
+
+map_plot(df$over_18, "Pathways Over 18 Weeks")
+
+map_plot(df$over_52, "Pathways Over 52 Weeks")
+
+map_plot(df$over_78, "Pathways Over 78 Weeks")
+
+map_plot(df$Average..median..waiting.time..in.weeks., "Average Median RTT Waiting Time (Weeks)") + scale_fill_gradientn(colours = wesanderson::wes_palette("Zissou1", 100, type = "continuous"))
+
+
+```

@@ -1,6 +1,6 @@
 ---
-title: "Seeing Politics"
-subtitle: "Exploring poltics through data visualisation. A blog by Katherine Higgs."
+title: "Figure It Out"
+subtitle: "A data visualisation blog by Katherine Higgs."
 ---
 
 

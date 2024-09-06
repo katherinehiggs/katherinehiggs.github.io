@@ -1,7 +1,7 @@
-name: "Seeing Politics"                                # CHANGE HERE 
+name: "Figure It Out"                                # CHANGE HERE 
 output_dir: "."
 navbar:
-  title: "Seeing Politics"                             # CHANGE HERE 
+  title: "Figure It Out"                             # CHANGE HERE 
   type: inverse
   left:
     - text: "Home"
@@ -16,14 +16,12 @@ navbar:
       menu:
         - text: Articles will appear in this section.
           href:
-  right:
-    - text: "Twitter"
-      icon: fa-twitter
-      href: https://x.com/KatHiggs_                    # CHANGE HERE 
+  right:                  # CHANGE HERE 
     - text: "GitHub"
       icon: fa-github
       href: https://github.com/katherinehiggs       # CHANGE HERE 
 output:
+
   html_document:
     theme: lumen
     highlight: kate
