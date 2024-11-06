@@ -10,5 +10,8 @@
   },
   "posts/welcome/index.qmd": {
     "index.html": "af88413f"
+  },
+  "posts/Visualisation with ggplot2/index.qmd": {
+    "index.html": "d739e5f4"
   }
 }
