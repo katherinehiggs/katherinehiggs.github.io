@@ -15,7 +15,7 @@ website:
 format:
   html:
     theme: 
-      - light zephyr
+      - zephyr
       - styles.scss
 
 editor: visual
