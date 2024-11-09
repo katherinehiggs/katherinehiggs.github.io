@@ -1,0 +1,4 @@
+"0","# We can also use a pipe from the dplyr library (think of it as 'then')"
+"0","penguins %>%"
+"0","  ggplot(aes(x=Island, fill=Species)) +"
+"0","  geom_bar()"

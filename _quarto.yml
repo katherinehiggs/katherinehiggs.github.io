@@ -14,8 +14,9 @@ website:
       
 format:
   html:
-    theme: pulse
-    css: styles.css
+    theme: 
+      - light zephyr
+      - styles.scss
 
 editor: visual
 

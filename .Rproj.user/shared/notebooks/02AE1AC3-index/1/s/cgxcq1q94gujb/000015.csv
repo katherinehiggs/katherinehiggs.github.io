@@ -1,4 +1,0 @@
-"0","movies %>%"
-"0","  ggplot(aes(x=Rating, y = Metascore, color=Rank))+"
-"0","  geom_point()+"
-"0","  geom_smooth(method=""lm"")"

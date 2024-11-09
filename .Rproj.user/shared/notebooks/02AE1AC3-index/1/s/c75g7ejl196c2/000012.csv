@@ -1,0 +1,4 @@
+"0","library(ggplot2) # Load the ggplot2 library at the start of the script"
+"0",""
+"0","ggplot(data = penguins, aes(x=Species)) +"
+"0","  geom_bar()"

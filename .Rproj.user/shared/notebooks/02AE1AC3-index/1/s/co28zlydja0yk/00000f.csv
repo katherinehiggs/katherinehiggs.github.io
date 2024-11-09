@@ -1,4 +1,0 @@
-"0","movies <- movies[order(movies$Rating, decreasing = TRUE),]"
-"0",""
-"0","top_ten <- movies[1:10,]"
-"0","bottom_ten <- movies[991:1000,]"
