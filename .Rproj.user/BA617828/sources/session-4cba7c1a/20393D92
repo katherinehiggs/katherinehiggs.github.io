@@ -1,14 +1,14 @@
 {
-    "id": "4F2232B5",
+    "id": "20393D92",
     "path": "~/GitHub/Blog/_quarto.yml",
     "project_path": "_quarto.yml",
     "type": "yaml",
-    "hash": "1470501253",
+    "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1730917114376.0,
+    "created": 1731176235538.0,
     "source_on_save": false,
-    "relative_order": 2,
+    "relative_order": 3,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
@@ -20,7 +20,7 @@
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1731176053440,
+    "last_content_update": 1731176053,
     "read_only": false,
     "read_only_alternatives": []
 }
