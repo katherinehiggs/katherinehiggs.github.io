@@ -1,0 +1,1 @@
+{"frames":[],"message":"Error in penguins(mydata[c(1, 2, 8)], as.factor) : \n  could not find function \"penguins\"\n"}

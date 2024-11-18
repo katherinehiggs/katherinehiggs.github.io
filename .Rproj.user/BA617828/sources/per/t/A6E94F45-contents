@@ -1,0 +1,311 @@
+library(ggplot2)
+library(dplyr)
+library(ggthemes)
+library(GGally)
+library(MASS)
+library(anytime)
+library(lubridate)
+library(tidyr)
+
+blackbirds <- read.csv("blackbird.physiology.csv")
+
+blackbirds$timestamp <- anytime(blackbirds$timestamp)
+
+# autumn Sep 1 to Oct 10
+# migration October 11 to November 20
+# winter November 21 to February 17
+# Spring February 18+
+
+blackbirds$year <- year(blackbirds$timestamp)
+blackbirds$month <- month(blackbirds$timestamp)
+blackbirds$hour <- hour(blackbirds$timestamp)
+blackbirds$weekday <- wday(blackbirds$timestamp)
+
+
+blackbirds$sex <- as.factor(blackbirds$sex)
+
+# Add Seasons
+blackbirds <- blackbirds %>%
+  mutate(season = case_when(
+    between(timestamp, as.Date("2016-09-01"), as.Date("2016-10-10"))~"Autumn",
+    between(timestamp, as.Date("2016-10-11"), as.Date("2016-11-20"))~ "Migration",
+    between(timestamp, as.Date("2016-11-21"), as.Date("2017-02-17"))~ "Winter",
+    between(timestamp, as.Date("2017-02-18"), as.Date("2017-08-31"))~ "Spring",
+    between(timestamp, as.Date("2017-09-01"), as.Date("2017-10-10"))~"Autumn",
+    between(timestamp, as.Date("2017-10-11"), as.Date("2017-11-20"))~ "Migration",
+    between(timestamp, as.Date("2017-11-21"), as.Date("2018-02-17"))~ "Winter",
+    between(timestamp, as.Date("2018-02-18"), as.Date("2019-08-31"))~ "Spring",
+    between(timestamp, as.Date("2018-09-01"), as.Date("2018-10-10"))~"Autumn",
+    between(timestamp, as.Date("2018-10-11"), as.Date("2018-11-20"))~ "Migration",
+    between(timestamp, as.Date("2018-11-21"), as.Date("2019-02-17"))~ "Winter",
+    between(timestamp, as.Date("2019-02-18"), as.Date("2020-08-31"))~ "Spring")
+)
+
+# Add study year
+blackbirds <- blackbirds %>%
+  mutate(study_year = case_when(
+    between(timestamp, as.Date("2016-09-01"), as.Date("2017-08-31"))~"Year 1",
+    between(timestamp, as.Date("2017-09-01"), as.Date("2018-08-31"))~"Year 2",
+    between(timestamp, as.Date("2018-09-01"), as.Date("2019-08-31"))~"Year 3",
+    between(timestamp, as.Date("2019-09-01"), as.Date("2020-08-31"))~ "Year 4")
+  )
+
+# Add AM or PM
+blackbirds <- blackbirds %>%
+  mutate(am_pm = case_when(
+    between(hour(timestamp), 0, 11)~"AM",
+    between(hour(timestamp), 12, 24)~"PM")
+  )
+
+# Add time of day
+blackbirds <- blackbirds %>%
+  mutate(time_of_day = case_when(
+    between(hour(timestamp), 0, 5)~"Night",
+    between(hour(timestamp), 6, 11)~"Morning",
+    between(hour(timestamp), 12, 17)~"Afternoon",
+    between(hour(timestamp), 18, 23)~"Evening",
+    between(hour(timestamp), 24, 25)~"Night"))
+
+# Change level order
+blackbirds$time_of_day <- factor(blackbirds$time_of_day, levels = c("Morning", "Afternoon", "Evening", "Night"))
+blackbirds$season <- as.factor(blackbirds$season)
+blackbirds$study_year <- as.factor(blackbirds$study_year)
+blackbirds$am_pm <- as.factor(blackbirds$am_pm)
+
+# Average temp
+blackbirds <- blackbirds |>
+  group_by(timestamp) |>
+   mutate(avg_temp = mean(scaled.tb, na.rm = TRUE))
+
+# Average heart rate
+blackbirds <- blackbirds |>
+  group_by(timestamp) |>
+  mutate(avg_hr= mean(scaled.tb, na.rm = TRUE))
+
+# Calculate average temperature by sex
+blackbirds_temp_sex <- blackbirds %>%
+  group_by(timestamp, sex) %>%
+  summarise(avg_temp_sex = mean(scaled.tb, na.rm = TRUE), avg_tarsus_sex = mean(scaled.tarsus, na.rm=TRUE))
+
+blackbirds_temp_sex <- pivot_longer(blackbirds_temp_sex, 'sex')
+
+# Calculate average heart rate by sex
+blackbirds_heart_sex <- blackbirds %>%
+  group_by(timestamp, sex) %>%
+  summarise(avg_hr_sex = mean(scaled.fh, na.rm = TRUE), avg_tarsus_sex = mean(scaled.tarsus, na.rm=TRUE))
+
+blackbirds_heart_sex <- pivot_longer(blackbirds_heart_sex, 'sex')
+
+# Final average by sex dataframe
+blackbirds_average_sex <- merge(blackbirds_heart_sex, blackbirds_temp_sex)
+
+blackbirds_average_sex <- merge(blackbirds_average_sex, blackbirds)
+# Plotting by sex
+
+blackbirds_average_sex |> filter(study_year=="Year 1") |> filter(((id == "7") | (id == "3"))) |>
+  ggplot(aes(x = timestamp, y = avg_temp, fill = time_of_day)) +
+  geom_area() +
+  facet_grid(~id)+
+  theme_hc()+
+  scale_fill_few()
+
+blackbirds_average_sex |> filter(study_year=="Year 1") |> filter(((id == "7") | (id == "3"))) |>
+  ggplot(aes(x = timestamp, y = avg_temp, colour = time_of_day)) +
+  geom_point() +
+  facet_grid(~id)+
+  theme_hc()+
+  geom_smooth(method="lm")+
+  scale_fill_few()
+
+# Plotting for average across both sexes
+
+blackbirds |> filter(study_year=="Year 1") |> filter(id == "3") |>
+  ggplot(aes(x = timestamp, y = avg_temp, colour = time_of_day)) +
+  geom_point() +
+  facet_grid(~time_of_day)+
+  theme_hc()+
+  geom_smooth(method="lm")+
+  scale_fill_few()
+
+blackbirds |> filter(study_year=="Year 1") |> filter(id == "3") |>
+  ggplot(aes(x = timestamp, y = avg_hr, colour = time_of_day)) +
+  geom_point() +
+  facet_grid(time_of_day~.)+
+  theme_hc()+
+  geom_smooth(method="lm")+
+  scale_fill_few()
+
+blackbirds |> filter(study_year=="Year 1") |> filter(id == "3") |>
+  ggplot(aes(x = timestamp, y = avg_temp, colour = time_of_day)) +
+  geom_point() +
+  facet_grid(time_of_day~.)+
+  theme(panel.spacing = unit(1, "lines"))+
+  theme_hc()+
+  geom_smooth(method="lm")+
+  scale_fill_few()
+
+
+blackbirds |> filter(((id == "3") | (id == "21") | (id == "53"))) |>
+  ggplot(aes(x = timestamp, y = avg_temp, colour = time_of_day, shape = study_year)) +
+  geom_point() +
+  facet_grid(time_of_day~.)+
+  theme(panel.spacing = unit(1, "lines"))+
+  theme_hc()+
+  geom_smooth(method="lm")+
+  scale_fill_few("Dark")
+
+blackbirds |> filter(((id == "3") | (id == "21") | (id == "53"))) |>
+  ggplot(aes(x = timestamp, y = avg_temp, colour = time_of_day, shape = study_year)) +
+  geom_point() +
+  facet_grid(time_of_day~study_year, scales = "free_x")+
+  theme(panel.spacing = unit(1, "lines"))+
+  theme_hc()+
+  geom_smooth(method="lm")+
+  scale_fill_few("Dark")
+
+blackbirds |> filter(((id == "3") | (id == "21") | (id == "53"))) |>
+  ggplot(aes(x = timestamp, y = avg_temp, fill = time_of_day, shape = study_year)) +
+  geom_area() +
+  facet_grid(time_of_day~study_year, scales = "free_x")+
+  theme(panel.spacing = unit(1, "lines"))+
+  theme_hc()+
+  # geom_smooth(method="lm")+
+  scale_fill_few("Medium")
+
+blackbirds |> filter(((id == "3") | (id == "21") | (id == "53"))) |>
+  ggplot(aes(x = timestamp, y = avg_hr, fill = time_of_day, shape = study_year)) +
+  geom_area() +
+  facet_grid(time_of_day~study_year, scales = "free_x")+
+  theme(panel.spacing = unit(1, "lines"))+
+  theme_hc()+
+  # geom_smooth(method="lm")+
+  scale_fill_few("Medium")
+
+blackbirds |> filter(((id == "3") | (id == "21") | (id == "53"))) |>
+  ggplot(aes(x = timestamp, y = avg_temp, fill = time_of_day, shape = study_year)) +
+  geom_area() +
+  facet_grid(.~study_year, scales = "free_x")+
+  theme(panel.spacing = unit(1, "lines"))+
+  theme_hc()+
+  # geom_smooth(method="lm")+
+  scale_fill_few("Medium")
+
+check <- filter(blackbirds, study_year == "Year 3")
+library(ggh4x)
+custom_x <- list(
+  scale_x_continuous(limits = c(as.Date(anytime('2016-09-01')), as.Date(anytime('2017-02-14')))),
+  scale_x_continuous(limits = c(as.Date(anytime('2017-09-01')), as.Date(anytime('2018-04-12')))),
+  scale_x_continuous(limits = c(as.Date(anytime('2018-09-01')), as.Date(anytime('2019-04-12'))))
+)
+
+blackbirds |> filter(((id == "3") | (id == "21") | (id == "53"))) |>
+  ggplot(aes(x = timestamp, y = avg_hr, fill = time_of_day)) +
+  geom_area() +
+  facet_grid(.~study_year, scales = "free_x")+
+  theme(panel.spacing = unit(1, "lines"))+
+  theme_hc()+
+  # geom_smooth(method="lm")+
+  scale_fill_few("Medium")
+  # facetted_pos_scales(x = custom_x)
+
+library(randomForest)
+data <- na.omit(blackbirds)
+data$sex <- as.factor(data$sex)
+data$season <- as.factor(data$season)
+data$study_year <- as.factor(data$study_year)
+data$am_pm <- as.factor(data$am_pm)
+
+data <- data[sample(nrow(data), 20000), ]
+set.seed(222)
+ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.7, 0.3))
+train <- data[ind==1,]
+test <- data[ind==2,]
+
+# write.csv(blackbirds, "weka_dat.csv")
+
+rf <- randomForest(scaled.fh~., data=train, proximity=TRUE)
+plot(rf)
+print(rf)
+prediction <- predict(rf, test)
+
+results <- data.frame(actual = test$scaled.fh, predictions = prediction)
+
+results |>
+  ggplot(aes(x = actual, y = prediction)) +
+  geom_point()+
+  geom_smooth(method="lm")+
+  theme_hc()
+
+cor(results$actual, results$predictions)
+
+model = glm(scaled.fh~., family = gaussian, na.omit(blackbirds))
+
+library(Metrics)
+
+predictions <- predict.glm(model)
+results <- data.frame(actual = na.omit(blackbirds)$scaled.fh, predictions = predictions)
+
+rmse(results$actual, results$predictions)
+cor(results$actual, results$predictions)
+
+results |>
+  ggplot(aes(x = actual, y = predictions)) +
+  geom_point()+
+  geom_smooth(method="lm")+
+  theme_hc()
+
+
+morning_data <- blackbirds |> filter(time_of_day == "Morning") |> na.omit()
+
+model = glm(scaled.fh~ timestamp + scaled.tb + scaled.tarsus + sex + year + month + hour + season + study_year,
+           family = gaussian, morning_data)
+
+predictions <- predict.glm(model)
+results <- data.frame(actual = morning_data$scaled.fh, predictions = predictions)
+
+rmse(results$actual, results$predictions)
+cor(results$actual, results$predictions)
+
+plot(results$actual, results$predictions)
+
+
+# Install and load the xgboost package
+install.packages("xgboost")
+library(xgboost)
+library(caret)
+
+na_black <- na.omit(blackbirds)
+na_black$timestamp <- as.integer(na_black$timestamp)
+# One-hot encode the categorical variables
+dummies <- dummyVars(scaled.fh ~ ., data = na_black)
+data_matrix <- predict(dummies, newdata = na_black)
+
+# Convert to a matrix
+data_matrix <- as.matrix(data_matrix)
+label <- na_black$scaled.fh
+
+# Prepare data
+data_matrix <- as.matrix(na_black[, -which(names(na_black) == "scaled.fh")])
+label <- na_black$scaled.fh
+
+# Train a gradient boosting model
+dtrain <- xgb.DMatrix(data = data_matrix, label = label)
+params <- list(objective = "reg:squarederror")
+model <- xgb.train(params, dtrain, nrounds = 100)
+
+# Make predictions
+predictions <- predict(model, dtrain)
+
+# Evaluate model performance
+mean_squared_error <- mean((label - predictions)^2)
+print(mean_squared_error)
+
+blackbirds |> filter(((id == "3") | (id == "21") | (id == "53"))) |>
+  ggplot(aes(x = avg_hr, y = avg_temp, fill = time_of_day, shape = study_year)) +
+  geom_area() +
+  facet_grid(.~study_year, scales = "free_x")+
+  theme(panel.spacing = unit(1, "lines"))+
+  theme_hc()+
+  # geom_smooth(method="lm")+
+  scale_fill_few("Medium")
+

@@ -1,0 +1,154 @@
+---
+title: "Insert title"
+description: "Insert description"
+date: "11/07/2024"
+draft: TRUE
+
+categories:
+  - ggplot2
+  - R
+  - data visualisation
+  - penguin tutorial
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+# Importing the Data
+
+```{r importing data}
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(dplyr)
+library(hrbrthemes)
+library(ggExtra)
+# Import the penguins dataset using the read.csv() function, built into R
+penguins <- read.csv("penguins_size.csv")
+
+penguins[c('species', 'island', 'sex')] <- lapply(penguins[c('species', 'island', 'sex')], as.factor)
+
+penguins <- penguins |> na.omit() |> rename('Island' = 'island', 'Species' = 'species', 'Sex' = 'sex') |> filter(!(Sex == "."))
+penguins <- na.omit(penguins)
+
+```
+
+```{r Basic scatter}
+penguins |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm))+
+  geom_point()
+```
+
+```{r Basic improved}
+penguins |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm))+
+  geom_point(shape = 16, colour = "#FF4F00")+
+  labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth in \n Penguins in the Palmer Archipelago") +
+  theme_ipsum()
+```
+
+```{r Basic trend}
+penguins |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm))+
+  geom_point(shape = 16, colour = "#FF4F00")+
+  labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth in \n Penguins in the Palmer Archipelago") +
+  geom_smooth(method="lm")+
+  theme_ipsum()
+
+print(cor(penguins$culmen_depth_mm, penguins$culmen_length_mm))
+```
+
+```{r distributions}
+plot <- penguins |>
+        ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm))+
+        geom_point(shape = 16, colour = "#FF4F00")+
+        labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth in \n Penguins in the Palmer Archipelago") +
+        geom_smooth(method="lm")+
+        theme_ipsum()
+
+
+ggMarginal(plot, type="histogram", fill = "#FF4F00", size=5, bins = 12)
+
+ggMarginal(plot, type="boxplot", fill = "#FF4F00", size=15)
+
+ggMarginal(plot, type="density", fill = "#FF4F00", size=10)
+```
+
+```{r consider species}
+penguins |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm, colour = Species))+
+  geom_point(shape = 16)+
+  labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth \n in Penguins in the Palmer Archipelago") +
+  geom_smooth(method="lm")+
+  scale_fill_few()+
+  theme_ipsum()
+
+correlation <- penguins %>%
+  group_by(Species) %>%
+    summarise(correlation = cor(culmen_length_mm, culmen_depth_mm))
+
+print(correlation)
+```
+
+```{r consider island}
+penguins |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm, colour = Island))+
+  geom_point(shape = 16)+
+  labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth \n in Penguins in the Palmer Archipelago") +
+  geom_smooth(method="lm")+
+  scale_fill_few()+
+  theme_ipsum()
+
+correlation <- penguins %>%
+  group_by(Island) %>%
+    summarise(correlation = cor(culmen_length_mm, culmen_depth_mm))
+
+print(correlation)
+```
+```{r consider sex}
+penguins |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm, colour = Sex))+
+  geom_point(shape = 16)+
+  labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth \n in Penguins in the Palmer Archipelago") +
+  geom_smooth(method="lm")+
+  scale_fill_few()+
+  theme_ipsum()
+
+correlation <- penguins %>%
+  group_by(Sex) %>%
+    summarise(correlation = cor(culmen_length_mm, culmen_depth_mm))
+
+print(correlation)
+```
+```{r bubble}
+penguins |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm, colour = "#FF4F00", size = flipper_length_mm))+
+  geom_point(shape = 16, alpha = 0.4)+
+  labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth \n in Penguins in the Palmer Archipelago") +
+  geom_smooth(method="lm")+
+  theme_ipsum()
+```
+
+```{r bubble mass}
+penguins |>
+  arrange(desc(body_mass_g)) |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm, colour = "#FF4F00", size = body_mass_g))+
+  geom_point(shape = 16, alpha = 0.5)+
+  labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth \n in Penguins in the Palmer Archipelago") +
+  geom_smooth(method="lm")+
+  theme_ipsum()
+```
+
+```{r bubble all}
+penguins |>
+  arrange(desc(flipper_length_mm)) |>
+  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm, colour = Species, size = flipper_length_mm))+
+  geom_point(shape = 16, alpha = 0.35)+
+  labs(x = "Culmen Length (mm)", y = "Culmen Depth (mm)", title = "Culmen Length vs. Depth \n in Penguins in the Palmer Archipelago") +
+  geom_smooth(method="lm")+
+  theme_ipsum()
+
+
+
+```
