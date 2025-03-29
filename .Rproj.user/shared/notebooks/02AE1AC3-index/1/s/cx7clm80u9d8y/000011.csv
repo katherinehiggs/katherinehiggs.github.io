@@ -1,7 +1,0 @@
-"0",""
-"0","penguins %>%"
-"0","  ggplot(aes(x=Island, fill=Species)) +"
-"0","  geom_bar(position = ""dodge2"")+"
-"0","  labs(title=""Penguins in the Palmer Archipelago"","
-"0","       x = ""Island"","
-"0","       y=""Penguin Count"")"

@@ -1,3 +1,0 @@
-"0","names(penguins)[names(penguins) == 'island'] <- 'Island'"
-"0","names(penguins)[names(penguins) == 'species'] <- 'Species'"
-"0","names(penguins)[names(penguins) == 'sex'] <- 'Sex'"

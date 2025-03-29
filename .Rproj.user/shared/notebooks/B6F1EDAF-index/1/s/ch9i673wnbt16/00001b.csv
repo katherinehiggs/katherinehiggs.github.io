@@ -1,6 +1,0 @@
-"0","penguins |>"
-"0","  ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm))+"
-"0","  geom_point(shape = 16, colour = ""#FF4F00"")+"
-"0","  labs(x = ""Culmen Length (mm)"", y = ""Culmen Depth (mm)"", title = ""Culmen Length vs. Depth in \n Penguins in the Palmer Archipelago"") +"
-"0","  scale_fill_few()+"
-"0","  theme_ipsum()"

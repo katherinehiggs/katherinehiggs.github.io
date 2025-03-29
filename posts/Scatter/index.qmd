@@ -22,6 +22,7 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 library(dplyr)
+install.packages('hrbrthemes')
 library(hrbrthemes)
 library(ggExtra)
 # Import the penguins dataset using the read.csv() function, built into R
@@ -106,6 +107,7 @@ correlation <- penguins %>%
 
 print(correlation)
 ```
+
 ```{r consider sex}
 penguins |>
   ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm, colour = Sex))+
@@ -121,6 +123,7 @@ correlation <- penguins %>%
 
 print(correlation)
 ```
+
 ```{r bubble}
 penguins |>
   ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm, colour = "#FF4F00", size = flipper_length_mm))+

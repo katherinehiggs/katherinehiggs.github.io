@@ -1,4 +1,0 @@
-"0","penguins$sex <- as.factor(penguins$sex)"
-"0","penguins$island <- as.factor(penguins$island)"
-"0","penguins$species <- as.factor(penguins$species)"
-"0",""
