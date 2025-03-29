@@ -1,0 +1,17 @@
+{
+  "hash": "e1ca7fd3e89b7e77362ba21ec64ede7d",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Hello Again\"\ndate: \"03/29/2025\"\ncategories:\n---\n\n\n\n\n\nIt’s been a little while since I last updated this blog, despite having an 80% finished post sitting on my computer since November! It has been quite a few months but I’m determined to get back on track. One thing that has changed is that I am now learning Swift with Paul Hudson’s amazing [100 Days of Swift](https://www.hackingwithswift.com/100/swiftui). This came about after repairing my old M1 Macbook Air (quite a scary thing to DIY) and subsequently falling back in love with everything Apple. So as well as posting about data visualition and statistics I would also like to make some posts about iOS development in the future so stay tuned : ).\n\nEnjoy some pictures of my cats (Autumn and Ebony) for reading this far.\n\n![](images/IMG_0204.jpeg){fig-alt=\"A picture of two cats, one is a tortie and one is black. The tortie is sitting in a basket and the black cat is sitting on an office chair.\"}\n\n![](images/PXL_20240710_075232676.jpeg){fig-alt=\"A black cat in a yellow tunnel.\"}\n\n![](images/PXL_20240918_145636149.jpeg){fig-alt=\"A tortie cat sitting.\"}\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
