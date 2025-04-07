@@ -6,6 +6,7 @@ categories:
   - ggplot2
   - R
   - data visualisation
+  - penguin tutorial
 ---
 
 ```{r setup, include=FALSE}
