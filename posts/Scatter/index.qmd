@@ -2,7 +2,6 @@
 title: "Scattering Penguins"
 description: "An introduction to scatter plots in ggplot2."
 date: "04/07/2025"
-draft: TRUE
 
 categories:
   - ggplot2
