@@ -11,7 +11,7 @@ about:
       text: Github
       href: https://github.com/katherinehiggs
     - text: '![](bluesky-icon.png){height=1em} Bluesky'
-      href: https://bsky.app/profile/katherinehiggs.bsky.social
+      href: https://bsky.app/profile/katherinehiggs.com
 ---
 
-Hi, I’m Kat! I’m a maths graduate with an interest in data visualisation, data science, technology and programming. I am currently learning Swift to develop my first iOS app!
+Hi, I’m Kat! I’m a maths graduate with an interest in data visualisation, data science, technology and programming.

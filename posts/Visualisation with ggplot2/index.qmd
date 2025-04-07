@@ -31,6 +31,7 @@ penguins <- read.csv("penguins_size.csv")
 print(penguins[1:5,])
 
 ```
+
 # Cleaning Up
 
 Viewing the dataset by printing the first few rows has revealed our first issue, this data has several NA values. A great way to visualise the amount of data missing in a given dataframe in R is using the `vis_miss` function from the `naniar` library. You may need to install this by running `install.packages('naniar')`.
@@ -163,6 +164,7 @@ penguins %>%
   scale_fill_few()+ 
   theme_calc() # We can mix and match themes and palettes
 ```
+
 # Combining Plots
 
 We can use a facet grid to combine all of the information from our plots so far into a single, easy to read plot. To do this we will need to reshape the `penguins` dataframe using the `melt` function and the the `MASS`, `reshape` and `reshape2` packages.
@@ -201,7 +203,7 @@ ggplot(penguin_2, aes(x=value, fill = Species))+
 
 ```
 
-# Conclusion 
+# Conclusion
 
 This final plot shows us the distribution of penguins across each island, for each species and for both sexes.
 

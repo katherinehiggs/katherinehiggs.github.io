@@ -12,7 +12,7 @@ website:
       - icon: github
         href: https://github.com/katherinehiggs
       - text: '![](subject.png){height=1em}'
-        href: https://bsky.app/profile/katherinehiggs.bsky.social
+        href: https://bsky.app/profile/katherinehiggs.com
       
 format:
   html:
