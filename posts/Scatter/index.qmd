@@ -1,5 +1,5 @@
 ---
-title: "Scattering Penguins"
+title: "Creating Scatter Plots with ggplot2"
 description: "An introduction to scatter plots in ggplot2."
 date: "04/07/2025"
 
@@ -7,7 +7,6 @@ categories:
   - ggplot2
   - R
   - data visualisation
-  - penguin tutorial
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +25,7 @@ As before the dataset being used can be downloaded directly (in csv format) from
 
 As previously we will be needing the `ggthemes` and `ggplot2` packages. To show off a few themes we'll use a different one for each plot. This time we will also be using the `dplyr` package for data manipulation and the `ggExtra` package which we will be using to plot distributions on plots.
 
-Firstly we import the data with `read.csv`. 
+Firstly we import the data with `read.csv`.
 
 ```{r importing data}
 library(dplyr)
@@ -105,7 +104,6 @@ We can further improve our plot by adding marginal plots, with `ggMarginal` from
 
 We do this as below, unlike before we know need to assign our plot to a variable and then call `ggMarginal` on our plot. This is to reduce code repetition when showing off each type of marginal plot available.
 
-
 ```{r distributions}
 plot <- penguins |>
         ggplot(aes(x = culmen_length_mm, y = culmen_depth_mm))+
@@ -130,7 +128,7 @@ For this data in particular I think the boxplot and density plots show the most 
 
 # Investigating Clustering
 
-Our previous plots were fine but they do little to explain the clusters of data in the graph. To investigate this we can add the parameter `colour = Species` to `aes`. 
+Our previous plots were fine but they do little to explain the clusters of data in the graph. To investigate this we can add the parameter `colour = Species` to `aes`.
 
 ```{r consider species}
 penguins |>
@@ -196,7 +194,7 @@ print(correlation)
 
 ```
 
-Now let's consider sex and species! 
+Now let's consider sex and species!
 
 ```{r consider sex}
 penguins |>
@@ -207,7 +205,8 @@ penguins |>
   scale_fill_few()+
   theme_excel_new()
 ```
-A similar patterns seems to emerge for each species by sex, however there is some slight strangeness. The linear model for male chinstrap penguins makes it appear like their culmen length increases at a greater rate with culmen depth than for female chinstrap penguins. This may be the case, but it may not. I think this highlights a key issue with splitting up data like this, as the size of the dataset you are working with decreases any attempt to make predictions with it become inherently less reliable. 
+
+A similar patterns seems to emerge for each species by sex, however there is some slight strangeness. The linear model for male chinstrap penguins makes it appear like their culmen length increases at a greater rate with culmen depth than for female chinstrap penguins. This may be the case, but it may not. I think this highlights a key issue with splitting up data like this, as the size of the dataset you are working with decreases any attempt to make predictions with it become inherently less reliable.
 
 # Facet Plots
 
@@ -230,7 +229,7 @@ ggplot(penguins, aes(x=culmen_length_mm, y = culmen_depth_mm, colour = Species))
 
 We can also do this for sex and species.
 
-```{r}       
+```{r}
 ggplot(penguins, aes(x=culmen_length_mm, y = culmen_depth_mm, colour = Sex))+
   geom_point()+
   geom_smooth(method="lm")+
@@ -242,9 +241,10 @@ ggplot(penguins, aes(x=culmen_length_mm, y = culmen_depth_mm, colour = Sex))+
        title="Culmen Length vs Depth by Species and Sex for Penguins in the Palmer Archipelago")+
   theme_stata()
 ```
+
 Or even just species if you would rather the data not be all on one plot.
 
-```{r}       
+```{r}
 ggplot(penguins, aes(x=culmen_length_mm, y = culmen_depth_mm, colour = Sex))+
   geom_point()+
   geom_smooth(method="lm")+
@@ -256,11 +256,12 @@ ggplot(penguins, aes(x=culmen_length_mm, y = culmen_depth_mm, colour = Sex))+
        title="Culmen Length vs Depth by Species for Penguins in the Palmer Archipelago")+
   theme_bw()
 ```
+
 We need to be very careful here however as if you were not paying attention it might not be obvious that this plot has three distinct x axes.
 
 We could make this same plot the other way around too. Notice that this time we need to write `Species~.`
 
-```{r}       
+```{r}
 ggplot(penguins, aes(x=culmen_length_mm, y = culmen_depth_mm, colour = Sex))+
   geom_point()+
   geom_smooth(method="lm")+
@@ -275,4 +276,4 @@ ggplot(penguins, aes(x=culmen_length_mm, y = culmen_depth_mm, colour = Sex))+
 
 # Conclusion
 
-I hope that this post has been a useful introduction to scatter plots with ggplot2. Why not try investigating the relationships between some of the other numeric variables for this data such as body mass or flipper_length? You could even try investigating three numerical variables at once using bubble plots! 
+I hope that this post has been a useful introduction to scatter plots with ggplot2. Why not try investigating the relationships between some of the other numeric variables for this data such as body mass or flipper_length? You could even try investigating three numerical variables at once using bubble plots!

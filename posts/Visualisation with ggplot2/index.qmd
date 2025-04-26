@@ -1,12 +1,11 @@
 ---
-title: "How Many Penguins? A First Look at Visualising Data With R and ggplot2"
+title: "A First Look at Visualising Data With R and ggplot2"
 description: "An introduction to ggplot2 using the Palmer Archipelago dataset, focusing on data cleansing and bar plots."
 date: "11/09/2024"
 categories:
   - ggplot2
   - R
   - data visualisation
-  - penguin tutorial
 ---
 
 ```{r setup, include=FALSE}
