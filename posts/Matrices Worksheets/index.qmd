@@ -16,8 +16,6 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 During the COVID-19 pandemic I created some worksheets based on A Level Maths and Further Maths. I've decided to upload these to my blog in case they can be of use.
 
-The thumbnail used is from
-
 # Matrix Arithmetic
 
 1.  Write down the size of the following matrices.
