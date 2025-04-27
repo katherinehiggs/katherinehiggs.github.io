@@ -1,0 +1,134 @@
+---
+title: "Matrices Worksheets 1.1: Matrix Arithmetic"
+date: "04/27/2025"
+categories:
+  - further maths worksheets
+  - matrices
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+# Introduction
+
+During the COVID-19 pandemic I created some worksheets based on A Level Maths and Further Maths. I've decided to upload these to my blog in case they can be of use.
+
+# Matrix Arithmetic
+
+1.  Write down the size of the following matrices.
+
+    a.  $$
+        \begin{pmatrix}
+        1 & 0 & 1 \\
+        x & y & z
+        \end{pmatrix}
+        $$
+
+    b.  $$
+        \begin{pmatrix}
+        -4 & 2 \\
+        0 & 1
+        \end{pmatrix}
+        $$
+
+    c.  $$
+        \begin{pmatrix}
+        1 & 4 & -1 & 0\\
+        -4 & 1 & -3 & 8 \\
+        2 & 0 & -8 & 3
+        \end{pmatrix}
+        $$
+
+        ------------------------------------------------------------------------
+
+2.  Given the following matrices:
+
+$$
+  \text{A} = \begin{pmatrix}
+                1 & 2 & -1 \\
+                0 & 4 & 1 \\
+                4 & 6 & -4
+            \end{pmatrix},
+  $$\
+$$ 
+\text{B} = \begin{pmatrix}
+                0 & 4& 1\\
+                2 & -6 & 0 \\
+            \end{pmatrix},
+  $$\
+$$
+  \text{C} = \begin{pmatrix}
+                -6 & 7 & -3\\
+                2& 0 & -1\\
+                3 & 4 & -9\\
+            \end{pmatrix}.
+  $$
+
+Calculate, where defined.
+
+a.  A + C
+
+b.  C - 2B
+
+c.  A + B
+
+    ------------------------------------------------------------------------
+
+<!-- -->
+
+3.  Calculate the following matrix sums.
+
+<!-- -->
+
+a.  $$ 
+    \begin{pmatrix}
+               1 & 2\\
+               3& 4\\
+               \end{pmatrix} + 2\begin{pmatrix}
+               4 & 8\\
+               0& -1\\
+               \end{pmatrix}
+      $$
+b.  $$ 
+    \begin{pmatrix}
+               0 & -8 & 6 \\
+               0 & -3 & 4 \\
+               -6 & 0 & 2 \\
+               \end{pmatrix} - \begin{pmatrix}
+               1 & 2 & 7 \\
+               6 & -5 & 4 \\
+               1 & 4 & -1 \\
+               \end{pmatrix}
+      $$
+c.  $$ 
+    \begin{pmatrix}
+               a & -1 & 2 \\
+               9 & -1 & 3 \\
+               -4 & -2 & 0 \\
+               3 & -3 & b \\
+               \end{pmatrix} -2 \begin{pmatrix}
+               -4 & 6 & 0 \\
+               3 & c & -1 \\
+               0 & -3 & d \\
+               4 & 2 &-6 \\
+               \end{pmatrix}
+      $$
+
+# Solutions
+
+1.  
+
+    ![](images/Screenshot%202025-04-27%20at%2020.41.34.png)
+
+    ------------------------------------------------------------------------
+
+2.  ![](images/Screenshot%202025-04-27%20at%2020.42.52.png)
+
+    ------------------------------------------------------------------------
+
+3.  ![](images/Screenshot%202025-04-27%20at%2020.43.41.png)
+
+    ------------------------------------------------------------------------
+
+4.  ![](images/Screenshot%202025-04-27%20at%2020.44.42.png)

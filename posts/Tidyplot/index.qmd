@@ -1,0 +1,25 @@
+---
+title: "Testing tidyplots"
+description: "An introduction to waffle plots in R by looking at the 2024 Olympic Games."
+date: "04/26/2025"
+categories:
+  - R
+  - data visualisation
+draft: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+# Introduction
+
+```{r imports}
+library(dplyr)
+library(tidyr)
+library(waffle)   
+```
+
+# Importing The Data
+
+# Processing The Data

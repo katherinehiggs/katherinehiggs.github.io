@@ -1,0 +1,15 @@
+{
+  "hash": "742ac1e2f8d95cbd22c819533310df22",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Testing tidyplots\"\ndescription: \"An introduction to waffle plots in R by looking at the 2024 Olympic Games.\"\ndate: \"04/26/2025\"\ncategories:\n  - R\n  - data visualisation\ndraft: TRUE\n---\n\n\n\n\n\n# Introduction\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(waffle)   \n```\n:::\n\n\n\n# Importing The Data\n\n# Processing The Data\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

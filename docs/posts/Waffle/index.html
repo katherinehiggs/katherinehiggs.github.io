@@ -75,6 +75,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -139,7 +141,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="https://bsky.app/profile/katherinehiggs.com"> 
-<span class="menu-text"><img src="subject.png" style="height:1em"></span></a>
+<span class="menu-text"><i class="fa-brands fa-bluesky" aria-label="bluesky"></i></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -162,6 +164,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-categories">
     <div class="quarto-category">R</div>
     <div class="quarto-category">data visualisation</div>
+    <div class="quarto-category">R tutorial</div>
   </div>
   </div>
 
@@ -242,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6    6   Netherlands   15      7     12</code></pre>
 </div>
 </div>
-<p>This is great however to plot a waffle plot we will actually need our data to be in a slightly different form. We do this with <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer()</a><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">.</a></p>
+<p>This is great however to plot a waffle plot we will actually need our data to be in a slightly different form. We do this with <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer().</a></p>
 <p>When using <code>pivot_longer()</code> Remember to specify the columns in the order you would like them to appear in the plot.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>long_data <span class="ot">&lt;-</span> olympic_data <span class="sc">|&gt;</span></span>
@@ -329,13 +332,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>There we have it, our first waffle plot! Each square represents a medal won.</p>
 <p>We can also turn this plot into a pictogram, to do this you will need fontawesome installed on your computer. By default the medal glyph is a bit too large for this plot so we set its size manually to 8 with the <code>glyph_size</code> argument.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fontawesome)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">waffle</span>(<span class="fu">data.frame</span>(GB_data<span class="sc">$</span>Medal, GB_data<span class="sc">$</span>Count), <span class="at">rows =</span> <span class="dv">5</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Team GB Medals: Paris 2024"</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend_pos =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">'#d4af37'</span>, <span class="st">'#c0c0c0'</span>, <span class="st">'#cd7f32'</span>),</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">use_glyph =</span> <span class="st">'medal'</span>, <span class="at">glyph_size =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(extrafont)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fontawesome)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">loadfonts</span>(<span class="at">device =</span> <span class="st">'all'</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">waffle</span>(<span class="fu">data.frame</span>(GB_data<span class="sc">$</span>Medal, GB_data<span class="sc">$</span>Count), <span class="at">rows =</span> <span class="dv">5</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Team GB Medals: Paris 2024"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend_pos =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">'#d4af37'</span>, <span class="st">'#c0c0c0'</span>, <span class="st">'#cd7f32'</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">use_glyph =</span> <span class="st">'medal'</span>, <span class="at">glyph_size =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

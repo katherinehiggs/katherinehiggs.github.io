@@ -5,6 +5,7 @@ date: "04/26/2025"
 categories:
   - R
   - data visualisation
+  - R tutorial
 ---
 
 ```{r setup, include=FALSE}
@@ -50,7 +51,7 @@ olympic_data$Country <- as.factor(olympic_data$Country)
 print(head(olympic_data))
 ```
 
-This is great however to plot a waffle plot we will actually need our data to be in a slightly different form. We do this with [pivot_longer()](https://tidyr.tidyverse.org/reference/pivot_longer.html)[.](https://tidyr.tidyverse.org/reference/pivot_longer.html)
+This is great however to plot a waffle plot we will actually need our data to be in a slightly different form. We do this with [pivot_longer().](https://tidyr.tidyverse.org/reference/pivot_longer.html)
 
 When using `pivot_longer()` Remember to specify the columns in the order you would like them to appear in the plot.
 
@@ -118,8 +119,9 @@ There we have it, our first waffle plot! Each square represents a medal won.
 We can also turn this plot into a pictogram, to do this you will need fontawesome installed on your computer. By default the medal glyph is a bit too large for this plot so we set its size manually to 8 with the `glyph_size` argument.
 
 ```{r}
+library(extrafont)
 library(fontawesome)
-
+loadfonts(device = 'all')
 waffle(data.frame(GB_data$Medal, GB_data$Count), rows = 5,
        title = "Team GB Medals: Paris 2024",
        legend_pos = "bottom",
