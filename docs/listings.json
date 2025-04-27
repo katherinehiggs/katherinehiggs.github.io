@@ -2,8 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/Matrices1.1/index.html",
       "/posts/Matrices1.2/index.html",
+      "/posts/Matrices1.1/index.html",
       "/posts/Waffle/index.html",
       "/posts/Scatter/index.html",
       "/posts/Visualisation with ggplot2/index.html"
