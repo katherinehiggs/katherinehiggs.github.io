@@ -1,0 +1,193 @@
+---
+title: "Matrices Worksheets 1.4: Finding The Inverse of a 2 x 2 Matrix"
+date: "04/30/2025"
+categories:
+  - further maths worksheets
+  - matrices
+description: "A worksheet on finding the inverse of 2x2 matrices."
+image: "images/Screenshot 2025-04-30 at 20.08.32.png"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+# Introduction
+
+During the COVID-19 pandemic I created some worksheets based on A Level Maths and Further Maths. I've decided to upload these to my blog in case they can be of use.
+
+# Finding The Inverse of a 2 x 2 Matrix
+
+1.  For each of the following matrices:
+
+<!-- -->
+
+i.  Calculate their determinant.
+ii. Find their inverse, if it exists.
+
+<!-- -->
+
+(a) $$
+        \begin{pmatrix}
+        1 & 2 \\
+        3 & 4 \\
+        \end{pmatrix}
+        $$
+
+(b) $$
+        \begin{pmatrix}
+        1 & -1 \\
+        6 & 2
+        \end{pmatrix}
+        $$
+
+(c) $$
+        \begin{pmatrix}
+        2 & 0 \\
+        3 & -3
+        \end{pmatrix}
+        $$
+
+(d) $$
+        \begin{pmatrix}
+        2 & 3 \\
+        5 & 7
+        \end{pmatrix}
+        $$
+
+(e) $$
+        \begin{pmatrix}
+        -3 & -1 \\
+        -2 & 6
+        \end{pmatrix}
+        $$
+
+(f) $$
+        \begin{pmatrix}
+        5 & 7 \\
+        -4 & 0
+        \end{pmatrix}
+        $$
+
+    ------------------------------------------------------------------------
+
+<!-- -->
+
+2.  For what values of $k$ does the matrix $$\begin{pmatrix}
+         k & 2k \\
+         1 & -k
+         \end{pmatrix} $$ have an inverse?
+
+    ------------------------------------------------------------------------
+
+3.  Given the matrices
+
+$$ \text{A} = \begin{pmatrix}
+        0 & 2 \\
+        1 & -6
+        \end{pmatrix} $$ and $$ \text{B} = \begin{pmatrix}
+        -4 & -3 \\
+        7 & 4
+        \end{pmatrix} $$ find:
+
+(a) $\text{A}^{-1}$
+
+(b) $\text{B}^{-1}$
+
+(c) $\text{A}^{-2}\text{B}$
+
+(d) $\text{(AB)}^{-1}$
+
+(e) $\text{(BA)}^{-1}$
+
+<!-- -->
+
+------------------------------------------------------------------------
+
+<!-- -->
+
+4.  By considering the inverse of the matrix $$\begin{pmatrix}
+         a & b \\
+         c & d
+         \end{pmatrix},$$ derive the general formula for the inverse of a 2 x 2 matrix, stating under which condition this result holds.
+
+    ------------------------------------------------------------------------
+
+<!-- -->
+
+5.  Prove that for any two invertible matrices A and B, $\text{(AB)}^{-1} = \text{B}^{-1}\text{A}^{-1}$.
+
+    ------------------------------------------------------------------------
+
+<!-- -->
+
+6.  Find the inverse of the general rotation matrix R for a rotation of θ degrees anticlockwise about the origin. $$\text{R} = \begin{pmatrix}
+        \cos{θ} & -\sin{θ} \\
+        \sin{θ} & \cos{θ}
+        \end{pmatrix}.$$ What does the matrix $\text{R}^{-1}$ represent geometrically.
+
+    ------------------------------------------------------------------------
+
+7.  
+
+    (a) Prove that for an invertible 2 x 2 matrix $$\text{A} = \begin{pmatrix}
+         a & b \\
+         c & d
+         \end{pmatrix},$$ then\
+        $$ \text{det(A}^{-1}) = \frac{1}{\text{det(A)}}.$$
+
+<!-- -->
+
+(b) 
+
+    By considering the fact that for an invertible n x n matrix $\text{B}$, $$\text{BB}^{-1} =\text{I}$$ prove the result in (a) generally for an n x n invertible matrix.
+
+# Solutions
+
+1\)
+
+![](images/Screenshot 2025-04-30 at 20.00.37.png)
+
+![](images/Screenshot 2025-04-30 at 20.01.12.png)
+
+![](images/Screenshot 2025-04-30 at 20.01.56.png)
+
+------------------------------------------------------------------------
+
+2\)
+
+![](images/Screenshot 2025-04-30 at 20.02.38.png)
+
+------------------------------------------------------------------------
+
+3\)
+
+![](images/Screenshot 2025-04-30 at 20.03.15.png)
+
+![](images/Screenshot 2025-04-30 at 20.03.44.png)
+
+------------------------------------------------------------------------
+
+4\)
+
+![](images/Screenshot 2025-04-30 at 20.04.36.png)
+
+------------------------------------------------------------------------
+
+5\)
+
+![](images/Screenshot 2025-04-30 at 20.05.37.png)
+
+------------------------------------------------------------------------
+
+6\)
+
+![](images/Screenshot 2025-04-30 at 20.06.19.png)
+
+------------------------------------------------------------------------
+
+7\)
+
+![](images/Screenshot 2025-04-30 at 20.07.01.png)
+
+![](images/Screenshot 2025-04-30 at 20.07.28.png)
